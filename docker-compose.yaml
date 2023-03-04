@@ -1,0 +1,46 @@
+version: "3.9" 
+
+services:
+  coach_front:
+    build: ./frontend
+    restart: always
+    depends_on:
+      - "coach_backend"
+    environment:
+      - PUBLIC_HOST=$COACH_URL
+      - VIRTUAL_HOST=$COACH_URL
+      - LETSENCRYPT_HOST=$COACH_URL
+      - VUE_APP_API_URL=$COACH_BACKEND_URL
+      - VUE_APP_API_TIMEOUT=200
+  coach_backend:
+    build: ./backend
+    restart: always
+    ports:
+      - 9998:9998
+    environment:
+      - PUBLIC_HOST=$COACH_BACKEND_URL
+      - VIRTUAL_HOST=$COACH_BACKEND_URL
+      - LETSENCRYPT_HOST=$COACH_BACKEND_URL
+  nginx_cert:
+    image: nginxproxy/nginx-proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./infra/conf.d:/etc/nginx/conf.d
+  acme:
+    image: nginxproxy/acme-companion
+    restart: always
+    volumes_from:
+      - nginx_cert
+    volumes:
+      - /etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - "coach_front"
+      - "coach_backend"
