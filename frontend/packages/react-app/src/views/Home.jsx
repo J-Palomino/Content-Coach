@@ -2,6 +2,8 @@ import { useContractReader } from "eth-hooks";
 import { ethers } from "ethers";
 import React from "react";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
@@ -15,16 +17,32 @@ function Home({ yourLocalBalance, readContracts }) {
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
   return (
-    <div>
+    <div style={{ height: "100vh" }}>
       <div style={{ margin: 32 }}>
         <span style={{ marginRight: 8 }}></span>
         Welcome to Content Coach
       </div>
       <div style={{ margin: 32 }}></div>
       <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>📝</span>
-        Note that official Lens contracts are currently deployed on Polygon Mumbai Testnet so make sure you are
-        connected to the same network on Metamask.
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "25ch" },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <div>
+            <TextField
+              id="filled-multiline-static"
+              label="Multiline"
+              multiline
+              rows={4}
+              defaultValue="Post Here"
+              variant="filled"
+            />
+          </div>
+        </Box>
       </div>
     </div>
   );
