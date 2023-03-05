@@ -7,10 +7,6 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 const { Configuration, OpenAIApi } = require("openai");
 
-const configuration = new Configuration({
-  apiKey: "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",
-});
-
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
  * @param {*} yourLocalBalance balance on current network
@@ -21,6 +17,9 @@ function Home({ yourLocalBalance, readContracts }) {
   const [PostInput, setPostInput] = useState();
   const [aiResults, setAIResults] = useState({});
   const [loadingState, setLoadingState] = useState();
+  const configuration = new Configuration({
+    apiKey: "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",
+  });
   const openai = new OpenAIApi(configuration);
 
   const getResults = async () => {
@@ -56,7 +55,6 @@ function Home({ yourLocalBalance, readContracts }) {
         <span style={{ marginRight: 8 }}></span>
         Welcome to Content Coach
       </div>
-      <div style={{ margin: 32 }}></div>
       <div style={{ margin: 32 }}>
         <Box
           component="form"
@@ -66,12 +64,13 @@ function Home({ yourLocalBalance, readContracts }) {
           noValidate
           autoComplete="off"
         >
-          <div style={{ color: "#FFFFFF" }}>
+          <div style={{ width: "100%", color: "#FFFFFF" }}>
             <TextField
-              sx={{ input: { color: "#FFFFFF" } }}
+              style={{ width: "100%" }}
+              inputProps={{ style: { color: "whitesmoke" } }}
               id="filled-multiline-static"
               multiline
-              rows={4}
+              rows={8}
               defaultValue="The Phoenix Suns are hiring Detroit Pistons executive Josh Bartelstein as the team's new CEO, sources told ESPN on Saturday.
 New owner Mat Ishbia targeted Bartelstein as CEO to help him overhaul a troubled post-Robert Sarver organizational culture and now they'll work together to oversee the franchise's business and basketball divisions, sources said.
 
@@ -89,9 +88,9 @@ He is also the son of Mark Bartelstein, one of the league's most prominent playe
           </div>
         </Box>
         <Button variant="contained" onClick={e => handleClick()}>
-          Maka da posts
+          Generate AI Posts
         </Button>
-        <div>{aiResults && <p>Results: {JSON.stringify(aiResults?.data?.choices[0].text)}</p>}</div>
+        <div>{aiResults && <p> {aiResults?.data?.choices[0].text.split("\\n[0-9]+.")}</p>}</div>
       </div>
     </div>
   );
