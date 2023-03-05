@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-const { Configuration, OpenAIApi } = require("openai");
 
+const { Configuration, OpenAIApi } = require("openai");
+const API_KEY = process.env.REACT_APP_API_KEY;
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
  * @param {*} yourLocalBalance balance on current network
@@ -18,10 +19,9 @@ function Home({ yourLocalBalance, readContracts }) {
   const [aiResults, setAIResults] = useState({});
   const [loadingState, setLoadingState] = useState();
   const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: API_KEY,
   });
   const openai = new OpenAIApi(configuration);
-
   const getResults = async () => {
     try {
       setLoadingState("Loading...");
